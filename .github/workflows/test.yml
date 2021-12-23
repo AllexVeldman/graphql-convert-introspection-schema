@@ -27,3 +27,11 @@ jobs:
       - run: |
           test -f "${{ steps.schema.outputs.path }}"
         shell: bash
+      - name: 'Test output path'
+        uses: ./
+        with:
+          schema: '__tests__/schema.json'
+          output: '__tests__/schema.graphql'
+      - run: |
+          test -f "__tests__/schema.graphql"
+        shell: bash

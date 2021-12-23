@@ -8,6 +8,10 @@ inputs:
   schema:
     required: true
     description: 'path to schema.json'
+  output:
+    required: false
+    default: './schema.graphql'
+    description: 'file path to write the schema to'
 outputs:
   path:
     description: 'file path of the generated schema'

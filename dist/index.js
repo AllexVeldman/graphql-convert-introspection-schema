@@ -41,7 +41,8 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const schema = core.getInput('schema');
-            const output_path = yield (0, schema_1.convertSchema)(schema);
+            const output = core.getInput('output');
+            const output_path = yield (0, schema_1.convertSchema)(schema, output);
             core.setOutput('path', output_path);
         }
         catch (error) {
@@ -69,14 +70,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.convertSchema = exports.parseSchema = void 0;
 const graphql_1 = __nccwpck_require__(6155);
 const promises_1 = __nccwpck_require__(9225);
-const path_1 = __importDefault(__nccwpck_require__(5622));
 /*
  * Convert a JSON introspection schema to a graphql schema
  *
@@ -92,12 +89,11 @@ function parseSchema(schema) {
     });
 }
 exports.parseSchema = parseSchema;
-function convertSchema(schema) {
+function convertSchema(schema, output_path) {
     return __awaiter(this, void 0, void 0, function* () {
         const data = yield parseSchema(schema);
-        const output = path_1.default.join('./', 'schema.graphql');
-        yield (0, promises_1.writeFile)(output, data);
-        return output;
+        yield (0, promises_1.writeFile)(output_path, data);
+        return output_path;
     });
 }
 exports.convertSchema = convertSchema;

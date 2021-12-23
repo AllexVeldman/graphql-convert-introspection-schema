@@ -10,9 +10,10 @@ See [action.yml](action.yml)
 
 ```yaml
 steps:
-- uses: AllexVeldman/graphql-convert-introspection-schema@v0.1.0
+- uses: AllexVeldman/graphql-convert-introspection-schema@main
   with:
     schema: '<path>/schema.json'
+    output: '<path>/schema.graphql'
 ```
 
 # License

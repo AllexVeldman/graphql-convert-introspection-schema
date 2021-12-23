@@ -1,7 +1,6 @@
 import {IntrospectionQuery, buildClientSchema, printSchema} from 'graphql'
 
 import {readFile, writeFile} from 'fs/promises'
-import path from 'path'
 
 /*
  * Convert a JSON introspection schema to a graphql schema
@@ -16,9 +15,11 @@ export async function parseSchema(schema: string): Promise<string> {
   return graphqlSchema
 }
 
-export async function convertSchema(schema: string): Promise<string> {
+export async function convertSchema(
+  schema: string,
+  output_path: string
+): Promise<string> {
   const data = await parseSchema(schema)
-  const output = path.join('./', 'schema.graphql')
-  await writeFile(output, data)
-  return output
+  await writeFile(output_path, data)
+  return output_path
 }
