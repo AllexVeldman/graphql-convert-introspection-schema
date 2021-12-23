@@ -8,6 +8,9 @@ inputs:
   schema:
     required: true
     description: 'path to schema.json'
+outputs:
+  path:
+    description: 'file path of the generated schema'
 runs:
   using: 'node16'
   main: 'dist/index.js'

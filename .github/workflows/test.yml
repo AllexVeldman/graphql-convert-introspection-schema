@@ -19,8 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./
+      - name: 'Test minimum'
+        id: schema
+        uses: ./
         with:
           schema: '__tests__/schema.json'
-      - run: test -f "schema.graphql"
+      - run: |
+          test -f "${{ steps.schema.outputs.path }}"
         shell: bash
