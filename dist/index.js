@@ -1394,12 +1394,29 @@ var _location = __nccwpck_require__(1922);
 
 var _printLocation = __nccwpck_require__(5250);
 
+function toNormalizedArgs(args) {
+  const firstArg = args[0];
+
+  if (firstArg == null || 'kind' in firstArg || 'length' in firstArg) {
+    return {
+      nodes: firstArg,
+      source: args[1],
+      positions: args[2],
+      path: args[3],
+      originalError: args[4],
+      extensions: args[5],
+    };
+  }
+
+  return firstArg;
+}
 /**
  * A GraphQLError describes an Error found during the parse, validate, or
  * execute phases of performing a GraphQL operation. In addition to a message
  * and stack trace, it also includes information about the locations in a
  * GraphQL document and/or execution result that correspond to the Error.
  */
+
 class GraphQLError extends Error {
   /**
    * An array of `{ line, column }` locations within the source GraphQL document
@@ -1442,17 +1459,15 @@ class GraphQLError extends Error {
   /**
    * Extension fields to add to the formatted error.
    */
-  constructor(
-    message,
-    nodes,
-    source,
-    positions,
-    path,
-    originalError,
-    extensions,
-  ) {
+
+  /**
+   * @deprecated Please use the `GraphQLErrorArgs` constructor overload instead.
+   */
+  constructor(message, ...rawArgs) {
     var _this$nodes, _nodeLocations$, _ref;
 
+    const { nodes, source, positions, path, originalError, extensions } =
+      toNormalizedArgs(rawArgs);
     super(message);
     this.name = 'GraphQLError';
     this.path = path !== null && path !== void 0 ? path : undefined;
@@ -1775,9 +1790,9 @@ exports.collectSubfields = collectSubfields;
 
 var _kinds = __nccwpck_require__(1927);
 
-var _directives = __nccwpck_require__(3614);
-
 var _definition = __nccwpck_require__(5821);
+
+var _directives = __nccwpck_require__(3614);
 
 var _typeFromAST = __nccwpck_require__(7664);
 
@@ -2015,25 +2030,25 @@ exports.execute = execute;
 exports.executeSync = executeSync;
 exports.getFieldDef = getFieldDef;
 
-var _inspect = __nccwpck_require__(102);
+var _devAssert = __nccwpck_require__(6514);
 
-var _memoize = __nccwpck_require__(4217);
+var _inspect = __nccwpck_require__(102);
 
 var _invariant = __nccwpck_require__(8847);
 
-var _devAssert = __nccwpck_require__(6514);
-
-var _isPromise = __nccwpck_require__(3910);
+var _isIterableObject = __nccwpck_require__(1258);
 
 var _isObjectLike = __nccwpck_require__(5865);
 
-var _promiseReduce = __nccwpck_require__(7286);
+var _isPromise = __nccwpck_require__(3910);
 
-var _promiseForObject = __nccwpck_require__(6804);
+var _memoize = __nccwpck_require__(4217);
 
 var _Path = __nccwpck_require__(1262);
 
-var _isIterableObject = __nccwpck_require__(1258);
+var _promiseForObject = __nccwpck_require__(6804);
+
+var _promiseReduce = __nccwpck_require__(7286);
 
 var _GraphQLError = __nccwpck_require__(4797);
 
@@ -2043,15 +2058,15 @@ var _ast = __nccwpck_require__(5494);
 
 var _kinds = __nccwpck_require__(1927);
 
-var _validate = __nccwpck_require__(2430);
+var _definition = __nccwpck_require__(5821);
 
 var _introspection = __nccwpck_require__(8344);
 
-var _definition = __nccwpck_require__(5821);
-
-var _values = __nccwpck_require__(4834);
+var _validate = __nccwpck_require__(2430);
 
 var _collectFields = __nccwpck_require__(9942);
+
+var _values = __nccwpck_require__(4834);
 
 /**
  * A memoized collection of relevant subfields with regard to the return
@@ -3067,6 +3082,12 @@ Object.defineProperty(exports, "getDirectiveValues", ({
     return _values.getDirectiveValues;
   },
 }));
+Object.defineProperty(exports, "getVariableValues", ({
+  enumerable: true,
+  get: function () {
+    return _values.getVariableValues;
+  },
+}));
 Object.defineProperty(exports, "responsePathAsArray", ({
   enumerable: true,
   get: function () {
@@ -3179,9 +3200,9 @@ Object.defineProperty(exports, "__esModule", ({
 exports.createSourceEventStream = createSourceEventStream;
 exports.subscribe = subscribe;
 
-var _inspect = __nccwpck_require__(102);
-
 var _devAssert = __nccwpck_require__(6514);
+
+var _inspect = __nccwpck_require__(102);
 
 var _isAsyncIterable = __nccwpck_require__(626);
 
@@ -3193,11 +3214,11 @@ var _locatedError = __nccwpck_require__(6842);
 
 var _collectFields = __nccwpck_require__(9942);
 
-var _values = __nccwpck_require__(4834);
-
 var _execute = __nccwpck_require__(3677);
 
 var _mapAsyncIterator = __nccwpck_require__(6063);
+
+var _values = __nccwpck_require__(4834);
 
 /**
  * Implements the "Subscribe" algorithm described in the GraphQL specification.
@@ -3449,9 +3470,9 @@ exports.getArgumentValues = getArgumentValues;
 exports.getDirectiveValues = getDirectiveValues;
 exports.getVariableValues = getVariableValues;
 
-var _keyMap = __nccwpck_require__(711);
-
 var _inspect = __nccwpck_require__(102);
+
+var _keyMap = __nccwpck_require__(711);
 
 var _printPathArray = __nccwpck_require__(4281);
 
@@ -3463,11 +3484,11 @@ var _printer = __nccwpck_require__(8203);
 
 var _definition = __nccwpck_require__(5821);
 
+var _coerceInputValue = __nccwpck_require__(9603);
+
 var _typeFromAST = __nccwpck_require__(7664);
 
 var _valueFromAST = __nccwpck_require__(3181);
-
-var _coerceInputValue = __nccwpck_require__(9603);
 
 /**
  * Prepares an object map of variableValues of the correct type based on the
@@ -3477,8 +3498,6 @@ var _coerceInputValue = __nccwpck_require__(9603);
  * Note: The returned value is a plain Object with a prototype, since it is
  * exposed to user code. Care should be taken to not pull values from the
  * Object prototype.
- *
- * @internal
  */
 function getVariableValues(schema, varDefNodes, inputs, options) {
   const errors = [];
@@ -3756,9 +3775,9 @@ var _isPromise = __nccwpck_require__(3910);
 
 var _parser = __nccwpck_require__(655);
 
-var _validate = __nccwpck_require__(4193);
+var _validate = __nccwpck_require__(2430);
 
-var _validate2 = __nccwpck_require__(2430);
+var _validate2 = __nccwpck_require__(4193);
 
 var _execute = __nccwpck_require__(3677);
 
@@ -3801,7 +3820,7 @@ function graphqlImpl(args) {
     typeResolver,
   } = args; // Validate Schema
 
-  const schemaValidationErrors = (0, _validate2.validateSchema)(schema);
+  const schemaValidationErrors = (0, _validate.validateSchema)(schema);
 
   if (schemaValidationErrors.length > 0) {
     return {
@@ -3819,7 +3838,7 @@ function graphqlImpl(args) {
     };
   } // Validate
 
-  const validationErrors = (0, _validate.validate)(schema, document);
+  const validationErrors = (0, _validate2.validate)(schema, document);
 
   if (validationErrors.length > 0) {
     return {
@@ -4635,6 +4654,12 @@ Object.defineProperty(exports, "getOperationRootType", ({
   enumerable: true,
   get: function () {
     return _index6.getOperationRootType;
+  },
+}));
+Object.defineProperty(exports, "getVariableValues", ({
+  enumerable: true,
+  get: function () {
+    return _index3.getVariableValues;
   },
 }));
 Object.defineProperty(exports, "getVisitFn", ({
@@ -7033,11 +7058,11 @@ var _syntaxError = __nccwpck_require__(2295);
 
 var _ast = __nccwpck_require__(5494);
 
-var _tokenKind = __nccwpck_require__(1565);
-
 var _blockString = __nccwpck_require__(4515);
 
 var _characterClasses = __nccwpck_require__(7234);
+
+var _tokenKind = __nccwpck_require__(1565);
 
 /**
  * Given a Source object, creates a Lexer for that source.
@@ -8094,17 +8119,17 @@ exports.parseValue = parseValue;
 
 var _syntaxError = __nccwpck_require__(2295);
 
-var _kinds = __nccwpck_require__(1927);
-
 var _ast = __nccwpck_require__(5494);
-
-var _tokenKind = __nccwpck_require__(1565);
-
-var _source = __nccwpck_require__(5521);
 
 var _directiveLocation = __nccwpck_require__(1205);
 
+var _kinds = __nccwpck_require__(1927);
+
 var _lexer = __nccwpck_require__(4605);
+
+var _source = __nccwpck_require__(5521);
+
+var _tokenKind = __nccwpck_require__(1565);
 
 /**
  * Given a GraphQL source, parses it into a Document.
@@ -10053,11 +10078,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.print = print;
 
-var _visitor = __nccwpck_require__(5678);
-
 var _blockString = __nccwpck_require__(4515);
 
 var _printString = __nccwpck_require__(6011);
+
+var _visitor = __nccwpck_require__(5678);
 
 /**
  * Converts an AST into a string, using one set of reasonable
@@ -10413,9 +10438,9 @@ Object.defineProperty(exports, "__esModule", ({
 exports.Source = void 0;
 exports.isSource = isSource;
 
-var _inspect = __nccwpck_require__(102);
-
 var _devAssert = __nccwpck_require__(6514);
+
+var _inspect = __nccwpck_require__(102);
 
 var _instanceOf = __nccwpck_require__(3481);
 
@@ -10541,9 +10566,9 @@ exports.getVisitFn = getVisitFn;
 exports.visit = visit;
 exports.visitInParallel = visitInParallel;
 
-var _inspect = __nccwpck_require__(102);
-
 var _devAssert = __nccwpck_require__(6514);
+
+var _inspect = __nccwpck_require__(102);
 
 var _ast = __nccwpck_require__(5494);
 
@@ -10644,12 +10669,11 @@ function visit(root, visitor, visitorKeys = _ast.QueryDocumentKeys) {
   let keys = [root];
   let index = -1;
   let edits = [];
-  let node = undefined;
+  let node = root;
   let key = undefined;
   let parent = undefined;
   const path = [];
   const ancestors = [];
-  let newRoot = root;
   /* eslint-enable no-undef-init */
 
   do {
@@ -10694,17 +10718,15 @@ function visit(root, visitor, visitorKeys = _ast.QueryDocumentKeys) {
       edits = stack.edits;
       inArray = stack.inArray;
       stack = stack.prev;
-    } else {
-      key = parent ? (inArray ? index : keys[index]) : undefined;
-      node = parent ? parent[key] : newRoot;
+    } else if (parent) {
+      key = inArray ? index : keys[index];
+      node = parent[key];
 
       if (node === null || node === undefined) {
         continue;
       }
 
-      if (parent) {
-        path.push(key);
-      }
+      path.push(key);
     }
 
     let result;
@@ -10789,10 +10811,11 @@ function visit(root, visitor, visitorKeys = _ast.QueryDocumentKeys) {
   } while (stack !== undefined);
 
   if (edits.length !== 0) {
-    newRoot = edits[edits.length - 1][1];
+    // New root
+    return edits[edits.length - 1][1];
   }
 
-  return newRoot;
+  return root;
 }
 /**
  * Creates a new visitor instance which delegates to many visitors to run in
@@ -11041,27 +11064,27 @@ exports.isWrappingType = isWrappingType;
 exports.resolveObjMapThunk = resolveObjMapThunk;
 exports.resolveReadonlyArrayThunk = resolveReadonlyArrayThunk;
 
-var _inspect = __nccwpck_require__(102);
-
-var _keyMap = __nccwpck_require__(711);
-
-var _mapValue = __nccwpck_require__(2223);
-
-var _toObjMap = __nccwpck_require__(4728);
-
 var _devAssert = __nccwpck_require__(6514);
-
-var _keyValMap = __nccwpck_require__(9268);
-
-var _instanceOf = __nccwpck_require__(3481);
 
 var _didYouMean = __nccwpck_require__(2878);
 
-var _isObjectLike = __nccwpck_require__(5865);
-
 var _identityFunc = __nccwpck_require__(1188);
 
+var _inspect = __nccwpck_require__(102);
+
+var _instanceOf = __nccwpck_require__(3481);
+
+var _isObjectLike = __nccwpck_require__(5865);
+
+var _keyMap = __nccwpck_require__(711);
+
+var _keyValMap = __nccwpck_require__(9268);
+
+var _mapValue = __nccwpck_require__(2223);
+
 var _suggestionList = __nccwpck_require__(7704);
+
+var _toObjMap = __nccwpck_require__(4728);
 
 var _GraphQLError = __nccwpck_require__(4797);
 
@@ -12338,23 +12361,23 @@ exports.isDirective = isDirective;
 exports.isSpecifiedDirective = isSpecifiedDirective;
 exports.specifiedDirectives = void 0;
 
-var _inspect = __nccwpck_require__(102);
-
-var _toObjMap = __nccwpck_require__(4728);
-
 var _devAssert = __nccwpck_require__(6514);
+
+var _inspect = __nccwpck_require__(102);
 
 var _instanceOf = __nccwpck_require__(3481);
 
 var _isObjectLike = __nccwpck_require__(5865);
 
+var _toObjMap = __nccwpck_require__(4728);
+
 var _directiveLocation = __nccwpck_require__(1205);
 
 var _assertName = __nccwpck_require__(4947);
 
-var _scalars = __nccwpck_require__(3145);
-
 var _definition = __nccwpck_require__(5821);
+
+var _scalars = __nccwpck_require__(3145);
 
 /**
  * Test if the given value is a GraphQL directive.
@@ -13133,15 +13156,15 @@ var _inspect = __nccwpck_require__(102);
 
 var _invariant = __nccwpck_require__(8847);
 
-var _printer = __nccwpck_require__(8203);
-
 var _directiveLocation = __nccwpck_require__(1205);
+
+var _printer = __nccwpck_require__(8203);
 
 var _astFromValue = __nccwpck_require__(2653);
 
-var _scalars = __nccwpck_require__(3145);
-
 var _definition = __nccwpck_require__(5821);
+
+var _scalars = __nccwpck_require__(3145);
 
 const __Schema = new _definition.GraphQLObjectType({
   name: '__Schema',
@@ -13753,11 +13776,11 @@ var _inspect = __nccwpck_require__(102);
 
 var _isObjectLike = __nccwpck_require__(5865);
 
+var _GraphQLError = __nccwpck_require__(4797);
+
 var _kinds = __nccwpck_require__(1927);
 
 var _printer = __nccwpck_require__(8203);
-
-var _GraphQLError = __nccwpck_require__(4797);
 
 var _definition = __nccwpck_require__(5821);
 
@@ -14109,23 +14132,23 @@ exports.GraphQLSchema = void 0;
 exports.assertSchema = assertSchema;
 exports.isSchema = isSchema;
 
-var _inspect = __nccwpck_require__(102);
-
-var _toObjMap = __nccwpck_require__(4728);
-
 var _devAssert = __nccwpck_require__(6514);
+
+var _inspect = __nccwpck_require__(102);
 
 var _instanceOf = __nccwpck_require__(3481);
 
 var _isObjectLike = __nccwpck_require__(5865);
 
+var _toObjMap = __nccwpck_require__(4728);
+
 var _ast = __nccwpck_require__(5494);
 
-var _introspection = __nccwpck_require__(8344);
+var _definition = __nccwpck_require__(5821);
 
 var _directives = __nccwpck_require__(3614);
 
-var _definition = __nccwpck_require__(5821);
+var _introspection = __nccwpck_require__(8344);
 
 /**
  * Test if the given value is a GraphQL schema.
@@ -14526,13 +14549,13 @@ var _ast = __nccwpck_require__(5494);
 
 var _typeComparators = __nccwpck_require__(333);
 
-var _schema = __nccwpck_require__(8505);
-
-var _introspection = __nccwpck_require__(8344);
+var _definition = __nccwpck_require__(5821);
 
 var _directives = __nccwpck_require__(3614);
 
-var _definition = __nccwpck_require__(5821);
+var _introspection = __nccwpck_require__(8344);
+
+var _schema = __nccwpck_require__(8505);
 
 /**
  * Implements the "Type Validation" sub-sections of the specification's
@@ -15198,9 +15221,9 @@ Object.defineProperty(exports, "__esModule", ({
 exports.TypeInfo = void 0;
 exports.visitWithTypeInfo = visitWithTypeInfo;
 
-var _kinds = __nccwpck_require__(1927);
-
 var _ast = __nccwpck_require__(5494);
+
+var _kinds = __nccwpck_require__(1927);
 
 var _visitor = __nccwpck_require__(5678);
 
@@ -15686,15 +15709,15 @@ var _inspect = __nccwpck_require__(102);
 
 var _invariant = __nccwpck_require__(8847);
 
-var _isObjectLike = __nccwpck_require__(5865);
-
 var _isIterableObject = __nccwpck_require__(1258);
+
+var _isObjectLike = __nccwpck_require__(5865);
 
 var _kinds = __nccwpck_require__(1927);
 
-var _scalars = __nccwpck_require__(3145);
-
 var _definition = __nccwpck_require__(5821);
+
+var _scalars = __nccwpck_require__(3145);
 
 /**
  * Produces a GraphQL Value AST given a JavaScript object.
@@ -15887,11 +15910,11 @@ var _kinds = __nccwpck_require__(1927);
 
 var _parser = __nccwpck_require__(655);
 
-var _validate = __nccwpck_require__(4193);
+var _directives = __nccwpck_require__(3614);
 
 var _schema = __nccwpck_require__(8505);
 
-var _directives = __nccwpck_require__(3614);
+var _validate = __nccwpck_require__(4193);
 
 var _extendSchema = __nccwpck_require__(1832);
 
@@ -16003,25 +16026,25 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.buildClientSchema = buildClientSchema;
 
-var _inspect = __nccwpck_require__(102);
-
 var _devAssert = __nccwpck_require__(6514);
 
-var _keyValMap = __nccwpck_require__(9268);
+var _inspect = __nccwpck_require__(102);
 
 var _isObjectLike = __nccwpck_require__(5865);
 
+var _keyValMap = __nccwpck_require__(9268);
+
 var _parser = __nccwpck_require__(655);
 
-var _schema = __nccwpck_require__(8505);
+var _definition = __nccwpck_require__(5821);
 
 var _directives = __nccwpck_require__(3614);
 
-var _scalars = __nccwpck_require__(3145);
-
 var _introspection = __nccwpck_require__(8344);
 
-var _definition = __nccwpck_require__(5821);
+var _scalars = __nccwpck_require__(3145);
+
+var _schema = __nccwpck_require__(8505);
 
 var _valueFromAST = __nccwpck_require__(3181);
 
@@ -16397,21 +16420,21 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.coerceInputValue = coerceInputValue;
 
+var _didYouMean = __nccwpck_require__(2878);
+
 var _inspect = __nccwpck_require__(102);
 
 var _invariant = __nccwpck_require__(8847);
 
-var _didYouMean = __nccwpck_require__(2878);
+var _isIterableObject = __nccwpck_require__(1258);
 
 var _isObjectLike = __nccwpck_require__(5865);
 
-var _suggestionList = __nccwpck_require__(7704);
+var _Path = __nccwpck_require__(1262);
 
 var _printPathArray = __nccwpck_require__(4281);
 
-var _Path = __nccwpck_require__(1262);
-
-var _isIterableObject = __nccwpck_require__(1258);
+var _suggestionList = __nccwpck_require__(7704);
 
 var _GraphQLError = __nccwpck_require__(4797);
 
@@ -16631,33 +16654,33 @@ Object.defineProperty(exports, "__esModule", ({
 exports.extendSchema = extendSchema;
 exports.extendSchemaImpl = extendSchemaImpl;
 
-var _keyMap = __nccwpck_require__(711);
+var _devAssert = __nccwpck_require__(6514);
 
 var _inspect = __nccwpck_require__(102);
 
-var _mapValue = __nccwpck_require__(2223);
-
 var _invariant = __nccwpck_require__(8847);
 
-var _devAssert = __nccwpck_require__(6514);
+var _keyMap = __nccwpck_require__(711);
+
+var _mapValue = __nccwpck_require__(2223);
 
 var _kinds = __nccwpck_require__(1927);
 
 var _predicates = __nccwpck_require__(535);
 
-var _validate = __nccwpck_require__(4193);
-
-var _values = __nccwpck_require__(4834);
-
-var _schema = __nccwpck_require__(8505);
-
-var _scalars = __nccwpck_require__(3145);
-
-var _introspection = __nccwpck_require__(8344);
+var _definition = __nccwpck_require__(5821);
 
 var _directives = __nccwpck_require__(3614);
 
-var _definition = __nccwpck_require__(5821);
+var _introspection = __nccwpck_require__(8344);
+
+var _scalars = __nccwpck_require__(3145);
+
+var _schema = __nccwpck_require__(8505);
+
+var _validate = __nccwpck_require__(4193);
+
+var _values = __nccwpck_require__(4834);
 
 var _valueFromAST = __nccwpck_require__(3181);
 
@@ -17438,23 +17461,21 @@ exports.DangerousChangeType = exports.BreakingChangeType = void 0;
 exports.findBreakingChanges = findBreakingChanges;
 exports.findDangerousChanges = findDangerousChanges;
 
-var _keyMap = __nccwpck_require__(711);
-
 var _inspect = __nccwpck_require__(102);
 
 var _invariant = __nccwpck_require__(8847);
 
-var _naturalCompare = __nccwpck_require__(38);
+var _keyMap = __nccwpck_require__(711);
 
 var _printer = __nccwpck_require__(8203);
 
-var _visitor = __nccwpck_require__(5678);
+var _definition = __nccwpck_require__(5821);
 
 var _scalars = __nccwpck_require__(3145);
 
-var _definition = __nccwpck_require__(5821);
-
 var _astFromValue = __nccwpck_require__(2653);
+
+var _sortValueNode = __nccwpck_require__(2278);
 
 let BreakingChangeType;
 exports.BreakingChangeType = BreakingChangeType;
@@ -17946,20 +17967,7 @@ function typeKindName(type) {
 function stringifyValue(value, type) {
   const ast = (0, _astFromValue.astFromValue)(value, type);
   ast != null || (0, _invariant.invariant)(false);
-  const sortedAST = (0, _visitor.visit)(ast, {
-    ObjectValue(objectNode) {
-      // Make a copy since sort mutates array
-      const fields = [...objectNode.fields];
-      fields.sort((fieldA, fieldB) =>
-        (0, _naturalCompare.naturalCompare)(
-          fieldA.name.value,
-          fieldB.name.value,
-        ),
-      );
-      return { ...objectNode, fields };
-    },
-  });
-  return (0, _printer.print)(sortedAST);
+  return (0, _printer.print)((0, _sortValueNode.sortValueNode)(ast));
 }
 
 function diff(oldArray, newArray) {
@@ -18006,6 +18014,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.getIntrospectionQuery = getIntrospectionQuery;
 
+/**
+ * Produce the GraphQL query recommended for a full schema introspection.
+ * Accepts optional IntrospectionOptions.
+ */
 function getIntrospectionQuery(options) {
   const optionsWithDefault = {
     descriptions: true,
@@ -18561,13 +18573,13 @@ var _keyValMap = __nccwpck_require__(9268);
 
 var _naturalCompare = __nccwpck_require__(38);
 
-var _schema = __nccwpck_require__(8505);
+var _definition = __nccwpck_require__(5821);
 
 var _directives = __nccwpck_require__(3614);
 
 var _introspection = __nccwpck_require__(8344);
 
-var _definition = __nccwpck_require__(5821);
+var _schema = __nccwpck_require__(8505);
 
 /**
  * Sort GraphQLSchema.
@@ -18744,19 +18756,19 @@ var _inspect = __nccwpck_require__(102);
 
 var _invariant = __nccwpck_require__(8847);
 
+var _blockString = __nccwpck_require__(4515);
+
 var _kinds = __nccwpck_require__(1927);
 
 var _printer = __nccwpck_require__(8203);
 
-var _blockString = __nccwpck_require__(4515);
+var _definition = __nccwpck_require__(5821);
+
+var _directives = __nccwpck_require__(3614);
 
 var _introspection = __nccwpck_require__(8344);
 
 var _scalars = __nccwpck_require__(3145);
-
-var _directives = __nccwpck_require__(3614);
-
-var _definition = __nccwpck_require__(5821);
 
 var _astFromValue = __nccwpck_require__(2653);
 
@@ -19164,6 +19176,61 @@ function collectDependencies(selectionSet) {
 
 /***/ }),
 
+/***/ 2278:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true,
+}));
+exports.sortValueNode = sortValueNode;
+
+var _naturalCompare = __nccwpck_require__(38);
+
+var _kinds = __nccwpck_require__(1927);
+
+/**
+ * Sort ValueNode.
+ *
+ * This function returns a sorted copy of the given ValueNode.
+ *
+ * @internal
+ */
+function sortValueNode(valueNode) {
+  switch (valueNode.kind) {
+    case _kinds.Kind.OBJECT:
+      return { ...valueNode, fields: sortFields(valueNode.fields) };
+
+    case _kinds.Kind.LIST:
+      return { ...valueNode, values: valueNode.values.map(sortValueNode) };
+
+    case _kinds.Kind.INT:
+    case _kinds.Kind.FLOAT:
+    case _kinds.Kind.STRING:
+    case _kinds.Kind.BOOLEAN:
+    case _kinds.Kind.NULL:
+    case _kinds.Kind.ENUM:
+    case _kinds.Kind.VARIABLE:
+      return valueNode;
+  }
+}
+
+function sortFields(fields) {
+  return fields
+    .map((fieldNode) => ({
+      ...fieldNode,
+      value: sortValueNode(fieldNode.value),
+    }))
+    .sort((fieldA, fieldB) =>
+      (0, _naturalCompare.naturalCompare)(fieldA.name.value, fieldB.name.value),
+    );
+}
+
+
+/***/ }),
+
 /***/ 7766:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -19175,13 +19242,13 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.stripIgnoredCharacters = stripIgnoredCharacters;
 
-var _source = __nccwpck_require__(5521);
-
-var _tokenKind = __nccwpck_require__(1565);
+var _blockString = __nccwpck_require__(4515);
 
 var _lexer = __nccwpck_require__(4605);
 
-var _blockString = __nccwpck_require__(4515);
+var _source = __nccwpck_require__(5521);
+
+var _tokenKind = __nccwpck_require__(1565);
 
 /**
  * Strips characters that are not significant to the validity or execution
@@ -19463,11 +19530,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.valueFromAST = valueFromAST;
 
-var _keyMap = __nccwpck_require__(711);
-
 var _inspect = __nccwpck_require__(102);
 
 var _invariant = __nccwpck_require__(8847);
+
+var _keyMap = __nccwpck_require__(711);
 
 var _kinds = __nccwpck_require__(1927);
 
@@ -20344,9 +20411,9 @@ exports.FieldsOnCorrectTypeRule = FieldsOnCorrectTypeRule;
 
 var _didYouMean = __nccwpck_require__(2878);
 
-var _suggestionList = __nccwpck_require__(7704);
-
 var _naturalCompare = __nccwpck_require__(38);
+
+var _suggestionList = __nccwpck_require__(7704);
 
 var _GraphQLError = __nccwpck_require__(4797);
 
@@ -20696,11 +20763,11 @@ var _invariant = __nccwpck_require__(8847);
 
 var _GraphQLError = __nccwpck_require__(4797);
 
-var _kinds = __nccwpck_require__(1927);
-
 var _ast = __nccwpck_require__(5494);
 
 var _directiveLocation = __nccwpck_require__(1205);
+
+var _kinds = __nccwpck_require__(1927);
 
 var _directives = __nccwpck_require__(3614);
 
@@ -20911,9 +20978,9 @@ var _GraphQLError = __nccwpck_require__(4797);
 
 var _predicates = __nccwpck_require__(535);
 
-var _scalars = __nccwpck_require__(3145);
-
 var _introspection = __nccwpck_require__(8344);
+
+var _scalars = __nccwpck_require__(3145);
 
 /**
  * Known type names
@@ -21406,6 +21473,8 @@ var _printer = __nccwpck_require__(8203);
 
 var _definition = __nccwpck_require__(5821);
 
+var _sortValueNode = __nccwpck_require__(2278);
+
 var _typeFromAST = __nccwpck_require__(7664);
 
 function reasonMessage(reason) {
@@ -21618,6 +21687,22 @@ function collectConflictsBetweenFieldsAndFragment(
   // and any fragment names found in the given fragment.
 
   for (const referencedFragmentName of referencedFragmentNames) {
+    // Memoize so two fragments are not compared for conflicts more than once.
+    if (
+      comparedFragmentPairs.has(
+        referencedFragmentName,
+        fragmentName,
+        areMutuallyExclusive,
+      )
+    ) {
+      continue;
+    }
+
+    comparedFragmentPairs.add(
+      referencedFragmentName,
+      fragmentName,
+      areMutuallyExclusive,
+    );
     collectConflictsBetweenFieldsAndFragment(
       context,
       conflicts,
@@ -21902,8 +21987,6 @@ function findConflict(
       (0, _definition.isObjectType)(parentType2));
 
   if (!areMutuallyExclusive) {
-    var _node1$arguments, _node2$arguments;
-
     // Two aliases must refer to the same field.
     const name1 = node1.name.value;
     const name2 = node2.name.value;
@@ -21914,22 +21997,9 @@ function findConflict(
         [node1],
         [node2],
       ];
-    } // FIXME https://github.com/graphql/graphql-js/issues/2203
+    } // Two field calls must have the same arguments.
 
-    const args1 =
-      /* c8 ignore next */
-      (_node1$arguments = node1.arguments) !== null &&
-      _node1$arguments !== void 0
-        ? _node1$arguments
-        : [];
-    const args2 =
-      /* c8 ignore next */
-      (_node2$arguments = node2.arguments) !== null &&
-      _node2$arguments !== void 0
-        ? _node2$arguments
-        : []; // Two field calls must have the same arguments.
-
-    if (!sameArguments(args1, args2)) {
+    if (stringifyArguments(node1) !== stringifyArguments(node2)) {
       return [
         [responseName, 'they have differing arguments'],
         [node1],
@@ -21974,26 +22044,27 @@ function findConflict(
   }
 }
 
-function sameArguments(arguments1, arguments2) {
-  if (arguments1.length !== arguments2.length) {
-    return false;
-  }
+function stringifyArguments(fieldNode) {
+  var _fieldNode$arguments;
 
-  return arguments1.every((argument1) => {
-    const argument2 = arguments2.find(
-      (argument) => argument.name.value === argument1.name.value,
-    );
-
-    if (!argument2) {
-      return false;
-    }
-
-    return sameValue(argument1.value, argument2.value);
-  });
-}
-
-function sameValue(value1, value2) {
-  return (0, _printer.print)(value1) === (0, _printer.print)(value2);
+  // FIXME https://github.com/graphql/graphql-js/issues/2203
+  const args =
+    /* c8 ignore next */
+    (_fieldNode$arguments = fieldNode.arguments) !== null &&
+    _fieldNode$arguments !== void 0
+      ? _fieldNode$arguments
+      : [];
+  const inputObjectWithArgs = {
+    kind: _kinds.Kind.OBJECT,
+    fields: args.map((argNode) => ({
+      kind: _kinds.Kind.OBJECT_FIELD,
+      name: argNode.name,
+      value: argNode.value,
+    })),
+  };
+  return (0, _printer.print)(
+    (0, _sortValueNode.sortValueNode)(inputObjectWithArgs),
+  );
 } // Two types conflict if both types could not apply to a value simultaneously.
 // Composite types are ignored as their individual field types will be compared
 // later recursively. However List and Non-Null types must match.
@@ -22211,9 +22282,9 @@ var _GraphQLError = __nccwpck_require__(4797);
 
 var _definition = __nccwpck_require__(5821);
 
-var _typeFromAST = __nccwpck_require__(7664);
-
 var _typeComparators = __nccwpck_require__(333);
+
+var _typeFromAST = __nccwpck_require__(7664);
 
 /**
  * Possible fragment spread
@@ -22304,11 +22375,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.PossibleTypeExtensionsRule = PossibleTypeExtensionsRule;
 
+var _didYouMean = __nccwpck_require__(2878);
+
 var _inspect = __nccwpck_require__(102);
 
 var _invariant = __nccwpck_require__(8847);
-
-var _didYouMean = __nccwpck_require__(2878);
 
 var _suggestionList = __nccwpck_require__(7704);
 
@@ -22491,9 +22562,9 @@ var _kinds = __nccwpck_require__(1927);
 
 var _printer = __nccwpck_require__(8203);
 
-var _directives = __nccwpck_require__(3614);
-
 var _definition = __nccwpck_require__(5821);
+
+var _directives = __nccwpck_require__(3614);
 
 /**
  * Provided required arguments
@@ -23629,11 +23700,11 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.ValuesOfCorrectTypeRule = ValuesOfCorrectTypeRule;
 
-var _keyMap = __nccwpck_require__(711);
+var _didYouMean = __nccwpck_require__(2878);
 
 var _inspect = __nccwpck_require__(102);
 
-var _didYouMean = __nccwpck_require__(2878);
+var _keyMap = __nccwpck_require__(711);
 
 var _suggestionList = __nccwpck_require__(7704);
 
@@ -23880,9 +23951,9 @@ var _kinds = __nccwpck_require__(1927);
 
 var _definition = __nccwpck_require__(5821);
 
-var _typeFromAST = __nccwpck_require__(7664);
-
 var _typeComparators = __nccwpck_require__(333);
+
+var _typeFromAST = __nccwpck_require__(7664);
 
 /**
  * Variables in allowed position
@@ -24172,99 +24243,99 @@ exports.specifiedSDLRules = exports.specifiedRules = void 0;
 
 var _ExecutableDefinitionsRule = __nccwpck_require__(9199);
 
-var _UniqueOperationNamesRule = __nccwpck_require__(4865);
-
-var _LoneAnonymousOperationRule = __nccwpck_require__(5726);
-
-var _SingleFieldSubscriptionsRule = __nccwpck_require__(4365);
-
-var _KnownTypeNamesRule = __nccwpck_require__(2509);
+var _FieldsOnCorrectTypeRule = __nccwpck_require__(3016);
 
 var _FragmentsOnCompositeTypesRule = __nccwpck_require__(381);
 
-var _VariablesAreInputTypesRule = __nccwpck_require__(9506);
-
-var _ScalarLeafsRule = __nccwpck_require__(6830);
-
-var _FieldsOnCorrectTypeRule = __nccwpck_require__(3016);
-
-var _UniqueFragmentNamesRule = __nccwpck_require__(9402);
-
-var _KnownFragmentNamesRule = __nccwpck_require__(5166);
-
-var _NoUnusedFragmentsRule = __nccwpck_require__(192);
-
-var _PossibleFragmentSpreadsRule = __nccwpck_require__(2450);
-
-var _NoFragmentCyclesRule = __nccwpck_require__(2564);
-
-var _UniqueVariableNamesRule = __nccwpck_require__(5931);
-
-var _NoUndefinedVariablesRule = __nccwpck_require__(1671);
-
-var _NoUnusedVariablesRule = __nccwpck_require__(242);
+var _KnownArgumentNamesRule = __nccwpck_require__(7959);
 
 var _KnownDirectivesRule = __nccwpck_require__(5303);
 
-var _UniqueDirectivesPerLocationRule = __nccwpck_require__(1944);
+var _KnownFragmentNamesRule = __nccwpck_require__(5166);
 
-var _KnownArgumentNamesRule = __nccwpck_require__(7959);
+var _KnownTypeNamesRule = __nccwpck_require__(2509);
 
-var _UniqueArgumentNamesRule = __nccwpck_require__(5799);
-
-var _ValuesOfCorrectTypeRule = __nccwpck_require__(9091);
-
-var _ProvidedRequiredArgumentsRule = __nccwpck_require__(7669);
-
-var _VariablesInAllowedPositionRule = __nccwpck_require__(8815);
-
-var _OverlappingFieldsCanBeMergedRule = __nccwpck_require__(3577);
-
-var _UniqueInputFieldNamesRule = __nccwpck_require__(3552);
+var _LoneAnonymousOperationRule = __nccwpck_require__(5726);
 
 var _LoneSchemaDefinitionRule = __nccwpck_require__(8307);
 
-var _UniqueOperationTypesRule = __nccwpck_require__(1492);
+var _NoFragmentCyclesRule = __nccwpck_require__(2564);
 
-var _UniqueTypeNamesRule = __nccwpck_require__(4316);
+var _NoUndefinedVariablesRule = __nccwpck_require__(1671);
+
+var _NoUnusedFragmentsRule = __nccwpck_require__(192);
+
+var _NoUnusedVariablesRule = __nccwpck_require__(242);
+
+var _OverlappingFieldsCanBeMergedRule = __nccwpck_require__(3577);
+
+var _PossibleFragmentSpreadsRule = __nccwpck_require__(2450);
+
+var _PossibleTypeExtensionsRule = __nccwpck_require__(75);
+
+var _ProvidedRequiredArgumentsRule = __nccwpck_require__(7669);
+
+var _ScalarLeafsRule = __nccwpck_require__(6830);
+
+var _SingleFieldSubscriptionsRule = __nccwpck_require__(4365);
+
+var _UniqueArgumentDefinitionNamesRule = __nccwpck_require__(5104);
+
+var _UniqueArgumentNamesRule = __nccwpck_require__(5799);
+
+var _UniqueDirectiveNamesRule = __nccwpck_require__(7074);
+
+var _UniqueDirectivesPerLocationRule = __nccwpck_require__(1944);
 
 var _UniqueEnumValueNamesRule = __nccwpck_require__(4437);
 
 var _UniqueFieldDefinitionNamesRule = __nccwpck_require__(9502);
 
-var _UniqueArgumentDefinitionNamesRule = __nccwpck_require__(5104);
+var _UniqueFragmentNamesRule = __nccwpck_require__(9402);
 
-var _UniqueDirectiveNamesRule = __nccwpck_require__(7074);
+var _UniqueInputFieldNamesRule = __nccwpck_require__(3552);
 
-var _PossibleTypeExtensionsRule = __nccwpck_require__(75);
+var _UniqueOperationNamesRule = __nccwpck_require__(4865);
+
+var _UniqueOperationTypesRule = __nccwpck_require__(1492);
+
+var _UniqueTypeNamesRule = __nccwpck_require__(4316);
+
+var _UniqueVariableNamesRule = __nccwpck_require__(5931);
+
+var _ValuesOfCorrectTypeRule = __nccwpck_require__(9091);
+
+var _VariablesAreInputTypesRule = __nccwpck_require__(9506);
+
+var _VariablesInAllowedPositionRule = __nccwpck_require__(8815);
 
 // Spec Section: "Executable Definitions"
-// Spec Section: "Operation Name Uniqueness"
-// Spec Section: "Lone Anonymous Operation"
-// Spec Section: "Subscriptions with Single Root Field"
-// Spec Section: "Fragment Spread Type Existence"
-// Spec Section: "Fragments on Composite Types"
-// Spec Section: "Variables are Input Types"
-// Spec Section: "Leaf Field Selections"
 // Spec Section: "Field Selections on Objects, Interfaces, and Unions Types"
-// Spec Section: "Fragment Name Uniqueness"
-// Spec Section: "Fragment spread target defined"
-// Spec Section: "Fragments must be used"
-// Spec Section: "Fragment spread is possible"
-// Spec Section: "Fragments must not form cycles"
-// Spec Section: "Variable Uniqueness"
-// Spec Section: "All Variable Used Defined"
-// Spec Section: "All Variables Used"
-// Spec Section: "Directives Are Defined"
-// Spec Section: "Directives Are Unique Per Location"
+// Spec Section: "Fragments on Composite Types"
 // Spec Section: "Argument Names"
-// Spec Section: "Argument Uniqueness"
-// Spec Section: "Value Type Correctness"
-// Spec Section: "Argument Optionality"
-// Spec Section: "All Variable Usages Are Allowed"
-// Spec Section: "Field Selection Merging"
-// Spec Section: "Input Object Field Uniqueness"
+// Spec Section: "Directives Are Defined"
+// Spec Section: "Fragment spread target defined"
+// Spec Section: "Fragment Spread Type Existence"
+// Spec Section: "Lone Anonymous Operation"
 // SDL-specific validation rules
+// Spec Section: "Fragments must not form cycles"
+// Spec Section: "All Variable Used Defined"
+// Spec Section: "Fragments must be used"
+// Spec Section: "All Variables Used"
+// Spec Section: "Field Selection Merging"
+// Spec Section: "Fragment spread is possible"
+// Spec Section: "Argument Optionality"
+// Spec Section: "Leaf Field Selections"
+// Spec Section: "Subscriptions with Single Root Field"
+// Spec Section: "Argument Uniqueness"
+// Spec Section: "Directives Are Unique Per Location"
+// Spec Section: "Fragment Name Uniqueness"
+// Spec Section: "Input Object Field Uniqueness"
+// Spec Section: "Operation Name Uniqueness"
+// Spec Section: "Variable Uniqueness"
+// Spec Section: "Value Type Correctness"
+// Spec Section: "Variables are Input Types"
+// Spec Section: "All Variable Usages Are Allowed"
 
 /**
  * This set includes all validation rules defined by the GraphQL spec.
@@ -24502,7 +24573,7 @@ exports.versionInfo = exports.version = void 0;
 /**
  * A string containing the version of the GraphQL.js library
  */
-const version = '16.2.0';
+const version = '16.3.0';
 /**
  * An object containing the components of the GraphQL.js version string
  */
@@ -24510,7 +24581,7 @@ const version = '16.2.0';
 exports.version = version;
 const versionInfo = Object.freeze({
   major: 16,
-  minor: 2,
+  minor: 3,
   patch: 0,
   preReleaseTag: null,
 });
